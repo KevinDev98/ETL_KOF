@@ -24,6 +24,9 @@
 			"transformations": [
 				{
 					"name": "OrderMaterialID"
+				},
+				{
+					"name": "AddRetornableBol"
 				}
 			],
 			"scriptLines": [
@@ -39,7 +42,8 @@
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> DatosUnicosView",
 				"DatosUnicosView sort(asc(MaterialID, true)) ~> OrderMaterialID",
-				"OrderMaterialID sink(allowSchemaDrift: true,",
+				"OrderMaterialID derive(RetornableBol = case(RetornabilidadCod=='NR',0,1)) ~> AddRetornableBol",
+				"AddRetornableBol sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          MaterialID as long,",
