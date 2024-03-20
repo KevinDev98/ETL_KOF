@@ -1,0 +1,9 @@
+{
+	"name": "afkof",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "78206ec7-c01d-4be8-ba51-cdb061a64ee9",
+		"tenantId": "0be08de9-f50d-4c0c-a62b-7af87e5a54f8"
+	}
+}

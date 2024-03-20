@@ -1,0 +1,37 @@
+{
+	"name": "SourceDataset_dkw",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DATA JSON",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"MaterialID": {
+					"type": "integer"
+				},
+				"MaterialDsc": {
+					"type": "string"
+				},
+				"BotellaCtd": {
+					"type": "integer"
+				},
+				"EnvaseDsc": {
+					"type": "string"
+				},
+				"RetornabilidadCod": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

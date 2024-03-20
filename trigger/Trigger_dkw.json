@@ -1,0 +1,24 @@
+{
+	"name": "Trigger_dkw",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "ETL_KOF",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 30,
+				"startTime": "2024-03-21T14:00:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}

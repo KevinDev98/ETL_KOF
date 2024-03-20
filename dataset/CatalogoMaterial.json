@@ -1,0 +1,48 @@
+{
+	"name": "CatalogoMaterial",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQL_KOF",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "MaterialID",
+				"type": "bigint",
+				"precision": 19,
+				"scale": 0
+			},
+			{
+				"name": "MaterialDsc",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "BotellaCtd",
+				"type": "int",
+				"precision": 10,
+				"scale": 0
+			},
+			{
+				"name": "EnvaseDsc",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "RetornabilidadCod",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "GRY_EXCEL_MATERIAL"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

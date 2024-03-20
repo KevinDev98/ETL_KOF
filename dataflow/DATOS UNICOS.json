@@ -1,0 +1,63 @@
+{
+	"name": "DATOS UNICOS",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "VW_Datos_Unicos",
+						"type": "DatasetReference"
+					},
+					"name": "DatosUnicosView"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Tmp_Datos_Unicos",
+						"type": "DatasetReference"
+					},
+					"name": "DatosUnicos"
+				}
+			],
+			"transformations": [
+				{
+					"name": "OrderMaterialID"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          MaterialID as long,",
+				"          MaterialDsc as string,",
+				"          BotellaCtd as integer,",
+				"          EnvaseDsc as string,",
+				"          RetornabilidadCod as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: true,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> DatosUnicosView",
+				"DatosUnicosView sort(asc(MaterialID, true)) ~> OrderMaterialID",
+				"OrderMaterialID sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          MaterialID as long,",
+				"          MaterialDsc as string,",
+				"          BotellaCtd as integer,",
+				"          EnvaseDsc as string,",
+				"          RetornabilidadCod as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     postSQLs:['EXEC DATA_MERGE'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> DatosUnicos"
+			]
+		}
+	}
+}

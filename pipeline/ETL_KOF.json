@@ -1,0 +1,169 @@
+{
+	"name": "ETL_KOF",
+	"properties": {
+		"activities": [
+			{
+				"name": "DATA_INGESTA_TO_GRY_EXCEL_MATERIAL",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Destination",
+						"value": "dbo.GRY_EXCEL_MATERIAL"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"maxConcurrentConnections": 5,
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['MaterialID']"
+								},
+								"sink": {
+									"name": "MaterialID",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "$['MaterialDsc']"
+								},
+								"sink": {
+									"name": "MaterialDsc",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BotellaCtd']"
+								},
+								"sink": {
+									"name": "BotellaCtd",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['EnvaseDsc']"
+								},
+								"sink": {
+									"name": "EnvaseDsc",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['RetornabilidadCod']"
+								},
+								"sink": {
+									"name": "RetornabilidadCod",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_dkw",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "CatalogoMaterial",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DATOS UNICOS",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "DATOS REPETIDOS",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DATOS UNICOS",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "DATOS REPETIDOS",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "DATA_INGESTA_TO_GRY_EXCEL_MATERIAL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DATOS REPETIDOS",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-03-20T21:22:57Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

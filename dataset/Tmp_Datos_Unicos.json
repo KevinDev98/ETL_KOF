@@ -1,0 +1,40 @@
+{
+	"name": "Tmp_Datos_Unicos",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQL_KOF",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "MaterialID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "MaterialDsc",
+				"type": "varchar"
+			},
+			{
+				"name": "BotellaCtd",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EnvaseDsc",
+				"type": "varchar"
+			},
+			{
+				"name": "RetornabilidadCod",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TMP_GRY_EXCEL_MATERIAL_UNICOS"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

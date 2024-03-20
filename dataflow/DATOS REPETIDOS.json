@@ -1,0 +1,77 @@
+{
+	"name": "DATOS REPETIDOS",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CatalogoMaterial",
+						"type": "DatasetReference"
+					},
+					"name": "dataraw"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Datos_repetidos",
+						"type": "DatasetReference"
+					},
+					"name": "MATERIALREPETIDOS"
+				}
+			],
+			"transformations": [
+				{
+					"name": "GroupBy"
+				},
+				{
+					"name": "SelectMaterialID"
+				},
+				{
+					"name": "Repetidos"
+				},
+				{
+					"name": "Order"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          MaterialID as long,",
+				"          MaterialDsc as string,",
+				"          BotellaCtd as integer,",
+				"          EnvaseDsc as string,",
+				"          RetornabilidadCod as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> dataraw",
+				"Order aggregate(groupBy(MaterialID),",
+				"     RepetidoCtd = count(MaterialID)) ~> GroupBy",
+				"dataraw select(mapColumn(",
+				"          MaterialID",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectMaterialID",
+				"GroupBy filter(RepetidoCtd>1) ~> Repetidos",
+				"SelectMaterialID sort(asc(MaterialID, true)) ~> Order",
+				"Repetidos sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          MaterialID as long,",
+				"          RepetidoCtd as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     postSQLs:['TRUNCATE TABLE GRY_EXCEL_MATERIAL_REPETIDOS'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> MATERIALREPETIDOS"
+			]
+		}
+	}
+}
